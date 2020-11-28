@@ -1,5 +1,5 @@
 #!/bin/bash
-# Usage: ./build3.sh 7.1.4
+# Usage: ./build3.sh 7.1.4 server|pro
 
 #
 # CONST
@@ -17,7 +17,7 @@ LIBSEARPC_VERSION_FIXED=3.1.0 # libsearpc sticks to 3.1.0 https://github.com/hai
 LIBSEARPC_TAG=v$LIBSEARPC_VERSION_LATEST
 #VERSION=7.1.4
 VERSION=$1 # easily pass the Seafile server version to the build3.sh script; e.g. ./build3.sh 7.1.4
-VERSION_TAG=v$VERSION-server
+VERSION_TAG=v$VERSION-$2
 VERSION_CCNET=6.0.1 # ccnet has not consistent version (see configure.ac)
 VERSION_SEAFILE=6.0.1 # ebenda for seafile
 MYSQL_CONFIG_PATH=/usr/bin/mysql_config # ensure compilation with mysql support
