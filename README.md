@@ -7,11 +7,11 @@ Seafile server package for Raspberry Pi. Maintained by seafile community.
 ## Build
 For Seafile versions which use Python 3. Seafile versions higher than 7.0.
 
-E.g. to compile Seafile server v8.0.2:
+E.g. to compile Seafile server v8.0.3:
 ```
 $ wget https://raw.githubusercontent.com/haiwen/seafile-rpi/master/build3.sh
 $ chmod u+x build3.sh
-$ ./build3.sh 8.0.2
+$ ./build3.sh 8.0.3
 ```
 Schema of created directory structure
 ```
@@ -43,7 +43,8 @@ $ sudo ./build.sh
 
 ## Manual and Guides
 
-- [Seafile Offical Document](http://manual.seafile.com/deploy/using_sqlite.html)
+- [Build Seafile server](https://manual.seafile.com/build_seafile/rpi/)
+- [Deploy Seafile server](https://manual.seafile.com/deploy/)
 
 ## Reporting Issues / GitHub Issues
 
