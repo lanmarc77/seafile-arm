@@ -221,7 +221,7 @@ build_seafile()
   fi
   (set -x; git reset --hard $VERSION_TAG)
   (set -x; ./autogen.sh)
-  (set -x; ./configure --with-mysql=$MYSQL_CONFIG_PATH)
+  (set -x; ./configure --enable-ldap --with-mysql=$MYSQL_CONFIG_PATH)
   (set -x; make dist)
   cd $SCRIPTPATH
 }
