@@ -24,7 +24,7 @@ VERSION_TAG=v$VERSION-$2
 VERSION_CCNET=6.0.1 # ccnet has not consistent version (see configure.ac)
 VERSION_SEAFILE=6.0.1 # ebenda for seafile
 MYSQL_CONFIG_PATH=/usr/bin/mysql_config # ensure compilation with mysql support
-PYTHON_REQUIREMENTS_URL_SEAHUB=https://raw.githubusercontent.com/ChatDeBlofeld/seafile-rpi/${VERSION_TAG}/seahub_requirements.txt
+PYTHON_REQUIREMENTS_URL_SEAHUB=https://raw.githubusercontent.com/ChatDeBlofeld/seafile-rpi/v${VERSION}/seahub_requirements.txt
 PYTHON_REQUIREMENTS_URL_SEAFDAV=https://raw.githubusercontent.com/haiwen/seafdav/${VERSION_TAG}/requirements.txt
 
 STEPS=13
