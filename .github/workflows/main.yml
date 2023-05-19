@@ -26,9 +26,9 @@ jobs:
            sudo apt-get update
            sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
            #./build_image.sh -t jammy -t latest -p
-           ./build_image.sh -t jammy -t latest -l linux/amd64
-           ./build_image.sh -t jammy -t latest -l linux/arm64
-           ./build_image.sh -t jammy -t latest -l linux/arm/v7
+           ./build_image.sh -t jammy -t latest -l amd64
+           ./build_image.sh -t jammy -t latest -l arm64
+           ./build_image.sh -t jammy -t latest -l arm/v7
            #sleep 30
            #docker images -a
            #docker pull --platform linux/amd64 -a localhost:5000/seafile/builder
