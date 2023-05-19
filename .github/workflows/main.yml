@@ -31,6 +31,7 @@ jobs:
            #docker pull --platform linux/amd64 localhost:5000/seafile/builder:latest
            docker images -a
            docker pull --platform linux/arm64 localhost:5000/seafile/builder:jammy
+           docker images -a
            docker pull --platform linux/arm64 localhost:5000/seafile/builder:latest
            docker images -a
            #docker pull --platform linux/arm/v7 localhost:5000/seafile/builder:jammy
