@@ -15,9 +15,8 @@ jobs:
            sed -i 's/docker buildx create/docker buildx create --config .\/buildkit.toml/g' ./build_image.sh
            sed -i 's/docker run -it --rm/docker run --rm/g' ./build_with_docker.sh
            echo >> ./build_image.sh
-           echo "EXTRATAG_OLD=\"\$([ \"\$REGISTRY\" ] && echo \$REGISTRY/)\$REPOSITORY/\$IMAGE\"" >> ./build_image.sh
-           echo "EXTRATAG_NEW=\"\$([ \"\$REGISTRY\" ] && echo \$REGISTRY/)\$REPOSITORY/\$IMAGE:latest\"" >> ./build_image.sh
-           echo "docker tag \$EXTRATAG_OLD \$EXTRATAG_NEW"  >> ./build_image.sh
+           #todo make this work with variables
+           echo "docker tag registry:5000/seafile/builder:jammy registry:5000/seafile/builder:latest"  >> ./build_image.sh
            cat ./build_image.sh
            chmod 755 ./build.sh
            chmod 755 ./build_with_docker.sh
