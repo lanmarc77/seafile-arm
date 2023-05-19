@@ -2,7 +2,7 @@ name: Build
 on: workflow_dispatch
 
 jobs:
-  buildAndDeployTest:
+  BuildAll:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -24,3 +24,10 @@ jobs:
            sudo apt-get update
            sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
            ./build_image.sh -t jammy -p
+           ./build_with_docker.sh -TA
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-without-markdown
+          path: |
+            build/**/built-seafile-server-pkgs
