@@ -32,6 +32,8 @@ jobs:
            ./build_with_docker.sh -T -A -P arm64
            ./build_image.sh -t jammy -t latest -l arm/v7
            ./build_with_docker.sh -T -A -P arm/v7
+           ./build_image.sh -t jammy -t latest -l arm/v6
+           ./build_with_docker.sh -T -A -P arm/v6
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
         with:
