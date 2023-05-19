@@ -26,14 +26,14 @@ jobs:
            echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
            sudo apt-get update
            sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+           ./build_image.sh -t jammy -t latest -l arm/v7
+           ./build_with_docker.sh -T -A -P armv7
+           ./build_image.sh -t jammy -t latest -l arm/v6
+           ./build_with_docker.sh -T -A -P armv6
            ./build_image.sh -t jammy -t latest -l amd64
            ./build_with_docker.sh -T -A -P amd64
            ./build_image.sh -t jammy -t latest -l arm64
            ./build_with_docker.sh -T -A -P arm64
-           ./build_image.sh -t jammy -t latest -l arm/v7
-           ./build_with_docker.sh -T -A -P arm/v7
-           ./build_image.sh -t jammy -t latest -l arm/v6
-           ./build_with_docker.sh -T -A -P arm/v6
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
         with:
