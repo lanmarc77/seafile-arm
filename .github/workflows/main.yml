@@ -39,7 +39,7 @@ jobs:
            #docker images -a
            #docker pull --platform linux/arm/v7 -a localhost:5000/seafile/builder
            docker images -a
-           ./build_with_docker.sh -T -A -B seafile/builder/jammy
+           ./build_with_docker.sh -T -A -B local/seafile/builder:jammy
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
         with:
