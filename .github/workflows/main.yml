@@ -12,7 +12,7 @@ jobs:
         run: |
            cp .env.example .env
            sed -i 's/PLATFORMS=".*"/PLATFORMS="linux\/amd64"/g' .env
-           sed -i 's/-f "$DOCKERFILE"/-f "$DOCKERFILE" --config .\/buildkit.toml/g' ./build_image.sh
+           sed -i 's/docker buildx create/docker buildx create --config .\/buildkit.toml/g' ./build_image.sh
            chmod 755 ./build.sh
            chmod 755 ./build_with_docker.sh
            chmod 755 ./build_image.sh
