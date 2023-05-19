@@ -32,6 +32,8 @@ jobs:
            docker images -a
            docker pull localhost:5000/seafile/builder:jammy
            docker images -a
+           docker pull localhost:5000/seafile/builder:latest
+           docker images -a
            ./build_with_docker.sh -T -A -P linux/amd64
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
