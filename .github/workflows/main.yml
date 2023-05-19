@@ -15,7 +15,7 @@ jobs:
            sed -i 's/docker buildx create/docker buildx create --config .\/buildkit.toml/g' ./build_image.sh
            sed -i 's/docker run -it --rm/docker run --rm/g' ./build_with_docker.sh
            echo >> ./build_image.sh
-           echo "EXTRATAG="\$TAGS -t \$([ \"\$REGISTRY\" ] && echo \$REGISTRY/)\$REPOSITORY/\$IMAGE:\$OPTARG\""
+           echo "EXTRATAG="\$TAGS -t \$([ \"\$REGISTRY\" ] && echo \$REGISTRY/)\$REPOSITORY/\$IMAGE:\$OPTARG\"" >> ./build_image.sh
            echo "docker tag \$TAGS \$EXTRATAG"  >> ./build_image.sh
            cat ./build_image.sh
            chmod 755 ./build.sh
