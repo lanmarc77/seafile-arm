@@ -10,6 +10,12 @@ jobs:
 
       - name: Build
         run: |
+           cp .env.example .env
+           sed -i 's/PLATFORMS=".*"/PLATFORMS="linux\/amd64"/g' .env
+           sudo cp ./buildkit.toml /etc/buildkitd.toml
+           chmod 755 ./build.sh
+           chmod 755 ./build_with_docker.sh
+           chmod 755 ./build_image.sh
            sudo apt-get install ca-certificates curl gnupg -y
            sudo install -m 0755 -d /etc/apt/keyrings
            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
@@ -17,8 +23,4 @@ jobs:
            echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
            sudo apt-get update
            sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-           cp .env.example .env
-           chmod 755 ./build.sh
-           chmod 755 ./build_with_docker.sh
-           chmod 755 ./build_image.sh
            ./build_image.sh -t jammy -p
