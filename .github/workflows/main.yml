@@ -11,7 +11,7 @@ jobs:
       - name: Build
         run: |
            cp .env.example .env
-           #sed -i 's/PLATFORMS=".*"/PLATFORMS="linux\/amd64"/g' .env
+           sed -i 's/PLATFORMS=".*"/PLATFORMS="linux\/arm64"/g' .env
            sed -i 's/docker buildx create/docker buildx create --config .\/buildkit.toml/g' ./build_image.sh
            sed -i '66 i TAGS="$TAGS -t $([ "$REGISTRY" ] && echo $REGISTRY/)$REPOSITORY/$IMAGE:latest"' ./build_image.sh
            sed -i 's/docker run -it --rm/docker run --rm/g' ./build_with_docker.sh
@@ -26,16 +26,16 @@ jobs:
            sudo apt-get update
            sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
            ./build_image.sh -t jammy -p
-           docker images -a
-           docker pull --platform linux/amd64 localhost:5000/seafile/builder:jammy
-           docker pull --platform linux/amd64 localhost:5000/seafile/builder:latest
+           #docker images -a
+           #docker pull --platform linux/amd64 localhost:5000/seafile/builder:jammy
+           #docker pull --platform linux/amd64 localhost:5000/seafile/builder:latest
            docker images -a
            docker pull --platform linux/arm64 localhost:5000/seafile/builder:jammy
            docker pull --platform linux/arm64 localhost:5000/seafile/builder:latest
            docker images -a
-           docker pull --platform linux/arm/v7 localhost:5000/seafile/builder:jammy
-           docker pull --platform linux/arm/v7 localhost:5000/seafile/builder:latest
-           docker images -a
+           #docker pull --platform linux/arm/v7 localhost:5000/seafile/builder:jammy
+           #docker pull --platform linux/arm/v7 localhost:5000/seafile/builder:latest
+           #docker images -a
            ./build_with_docker.sh -T -A
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
