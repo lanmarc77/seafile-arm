@@ -10,7 +10,7 @@ jobs:
 
       - name: Build
         run: |
-           apt-get install docker -y
+           sudo apt-get install docker -y
            cp .env.example .env
            chmod 755 ./build.sh
            chmod 755 ./build-docker.sh
