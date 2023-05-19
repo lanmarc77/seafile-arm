@@ -13,6 +13,6 @@ jobs:
            sudo apt-get install docker -y
            cp .env.example .env
            chmod 755 ./build.sh
-           chmod 755 ./build-docker.sh
-           chmod 755 ./build-image.sh
-           ./build-image.sh -t jammy -p
+           chmod 755 ./build_with_docker.sh
+           chmod 755 ./build_image.sh
+           ./build_image.sh -t jammy -p
