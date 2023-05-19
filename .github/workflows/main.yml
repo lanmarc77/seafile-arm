@@ -8,15 +8,15 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: Build
+      - name: BuildJammy
         run: |
            cp .env.example .env
-           sed -i 's/PLATFORMS=".*"/PLATFORMS="linux\/arm64"/g' .env
-           sed -i 's/docker buildx create/docker buildx create --config .\/buildkit.toml/g' ./build_image.sh
-           sed -i 's/docker run -it --rm/docker run --rm/g' ./build_with_docker.sh
+           #sed -i 's/PLATFORMS=".*"/PLATFORMS="linux\/arm64"/g' .env
            sed -i 's/REGISTRY=".*"/REGISTRY="local"/g' .env
            sed -i 's/BUILDER=".*"/BUILDER="local\/seafile\/builder:jammy"/g' .env
-           sed -i 's/--pull.*/--pull missing \\/g' ./build_with_docker.sh
+           sed -i 's/docker buildx create/docker buildx create --config .\/buildkit.toml/g' ./build_image.sh
+           sed -i 's/docker run -it --rm/docker run --rm/g' ./build_with_docker.sh
+           sed -i 's/--pull always.*/--pull missing \\/g' ./build_with_docker.sh
            chmod 755 ./build.sh
            chmod 755 ./build_with_docker.sh
            chmod 755 ./build_image.sh
@@ -27,19 +27,10 @@ jobs:
            echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
            sudo apt-get update
            sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-           #./build_image.sh -t jammy -t latest -p
-           #./build_image.sh -t jammy -t latest -l amd64
+           ./build_image.sh -t jammy -t latest -l amd64
            ./build_image.sh -t jammy -t latest -l arm64
-           #./build_image.sh -t jammy -t latest -l arm/v7
-           #sleep 30
-           #docker images -a
-           #docker pull --platform linux/amd64 -a localhost:5000/seafile/builder
-           #docker images -a
-           #docker pull --platform linux/arm64 -a localhost:5000/seafile/builder
-           #docker images -a
-           #docker pull --platform linux/arm/v7 -a localhost:5000/seafile/builder
-           docker images -a
-           ./build_with_docker.sh -T -A -B local/seafile/builder:jammy
+           ./build_image.sh -t jammy -t latest -l arm/v7
+           ./build_with_docker.sh -T -A
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
         with:
