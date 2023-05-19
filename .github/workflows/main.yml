@@ -27,9 +27,9 @@ jobs:
            sudo apt-get update
            sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
            ./build_image.sh -t jammy -t latest -l arm/v7
-           ./build_with_docker.sh -T -A -P armv7
+           ./build_with_docker.sh -T -A -P linux/arm/v7
            ./build_image.sh -t jammy -t latest -l arm/v6
-           ./build_with_docker.sh -T -A -P armv6
+           ./build_with_docker.sh -T -A -P linux/arm/v6
            ./build_image.sh -t jammy -t latest -l amd64
            ./build_with_docker.sh -T -A -P amd64
            ./build_image.sh -t jammy -t latest -l arm64
