@@ -13,7 +13,7 @@ jobs:
            cp .env.example .env
            sed -i 's/PLATFORMS=".*"/PLATFORMS="linux\/amd64"/g' .env
            sed -i 's/docker buildx create/docker buildx create --config .\/buildkit.toml/g' ./build_image.sh
-           sed -i 's/SEAFILE_VERSION=/SEAFILE_VERSION=$VERSION/g' ./build.sh
+           sed -i 's/VERSION_SEAFILE=/VERSION_SEAFILE=$VERSION/g' ./build.sh
            sed -i '66 i TAGS="$TAGS -t $([ "$REGISTRY" ] && echo $REGISTRY/)$REPOSITORY/$IMAGE:latest"' ./build_image.sh
            #sed -i '67 i echo $TAGS' ./build_image.sh
            #cat ./build_image.sh
