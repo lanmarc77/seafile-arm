@@ -1,18 +1,17 @@
-name: Build
+name: BuildServerPackages
 on: workflow_dispatch
 
 jobs:
-  BuildAll:
+  BuildAllPlatforms:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-
-      - name: BuildJammy
+      - name: PrepareHost
         run: |
            cp .env.example .env
            sed -i 's/REGISTRY=".*"/REGISTRY="local"/g' .env
-           sed -i 's/BUILDER=".*"/BUILDER="local\/seafile\/builder:jammy"/g' .env
+           #sed -i 's/BUILDER=".*"/BUILDER="local\/seafile\/builder:jammy"/g' .env
            sed -i 's/docker buildx create/docker buildx create --config .\/buildkit.toml/g' ./build_image.sh
            sed -i 's/docker run -it --rm/docker run --rm/g' ./build_with_docker.sh
            sed -i 's/--pull always.*/--pull missing \\/g' ./build_with_docker.sh
@@ -26,12 +25,22 @@ jobs:
            echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
            sudo apt-get update
            sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+      - name: BuildJammy
+        run: |
            ./build_image.sh -t jammy -t latest -l arm/v7
-           ./build_with_docker.sh -T -A -P linux/arm/v7
+           ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:jammy
            ./build_image.sh -t jammy -t latest -l arm64
-           ./build_with_docker.sh -T -A -P linux/arm64
+           ./build_with_docker.sh -T -A -P linux/arm64 -B local/seafile/builder:jammy
            ./build_image.sh -t jammy -t latest -l amd64
-           ./build_with_docker.sh -T -A -P linux/amd64
+           ./build_with_docker.sh -T -A -P linux/amd64 -B local/seafile/builder:jammy
+      - name: BuildBuster
+        run: |
+           ./build_image.sh -t buster -t latest -l arm/v7
+           ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:buster
+           ./build_image.sh -t buster -t latest -l arm64
+           ./build_with_docker.sh -T -A -P linux/arm64 -B local/seafile/builder:buster
+           ./build_image.sh -t buster -t latest -l amd64
+           ./build_with_docker.sh -T -A -P linux/amd64 -B local/seafile/builder:buster
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
         with:
