@@ -28,25 +28,25 @@ jobs:
       - name: BuildJammy
         run: |
            ./build_image.sh -t jammy -t latest -l amd64 -r local
-           ./build_with_docker.sh -T -A -P linux/amd64 -B local/seafile/builder:jammy
+           ./build_with_docker.sh -T -A -P amd64 -B local/seafile/builder:jammy
            ./build_image.sh -t jammy -t latest -l arm64 -r local
-           ./build_with_docker.sh -T -A -P linux/arm64 -B local/seafile/builder:jammy
+           ./build_with_docker.sh -T -A -P arm64 -B local/seafile/builder:jammy
            ./build_image.sh -t jammy -t latest -l arm/v7 -r local
            ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:jammy
       - name: BuildBuster
         run: |
            ./build_image.sh -t buster -t latest -l amd64 -r local
-           ./build_with_docker.sh -T -A -P linux/amd64 -B local/seafile/builder:buster
+           ./build_with_docker.sh -T -A -P amd64 -B local/seafile/builder:buster
            ./build_image.sh -t buster -t latest -l arm64 -r local
-           ./build_with_docker.sh -T -A -P linux/arm64 -B local/seafile/builder:buster
+           ./build_with_docker.sh -T -A -P arm64 -B local/seafile/builder:buster
            ./build_image.sh -t buster -t latest -l arm/v7 -r local
            ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:buster
       - name: BuildBookworm
         run: |
            ./build_image.sh -t bookworm -t latest -l amd64 -r local
-           ./build_with_docker.sh -T -A -P linux/amd64 -B local/seafile/builder:bookworm
+           ./build_with_docker.sh -T -A -P amd64 -B local/seafile/builder:bookworm
            ./build_image.sh -t bookworm -t latest -l arm64 -r local
-           ./build_with_docker.sh -T -A -P linux/arm64 -B local/seafile/builder:bookworm
+           ./build_with_docker.sh -T -A -P arm64 -B local/seafile/builder:bookworm
            ./build_image.sh -t bookworm -t latest -l arm/v7 -r local
            ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:bookworm
       - name: Archive artifacts
