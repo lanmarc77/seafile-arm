@@ -26,54 +26,55 @@ jobs:
            echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
            sudo apt-get update
            sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-      - name: BuildJammy
-        run: |
-           sed -i 's/DOCKERFILE=".*"/DOCKERFILE="image\/jammy\/Dockerfile"/g' .env
-           sed -i '8 i ARG GOVERSION' image/jammy/Dockerfile
-           sed -i '9 i RUN wget https://go.dev/dl/$GOVERSION' image/jammy/Dockerfile
-           sed -i '10 i RUN tar -xzf $GOVERSION' image/jammy/Dockerfile
-           sed -i '11 i RUN mv go /usr/local' image/jammy/Dockerfile
-           sed -i '12 i RUN ln -s /usr/local/go/bin/go /usr/bin/go' image/jammy/Dockerfile
-           GOVERSION=go1.20.4.linux-arm64.tar.gz ./build_image.sh -t jammy -t latest -l arm64
-           ./build_with_docker.sh -T -A -P linux/arm64 -B local/seafile/builder:jammy
-           GOVERSION=go1.20.4.linux-armv6l.tar.gz ./build_image.sh -t jammy -t latest -l arm/v7
-           ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:jammy
-#      - name: BuildBuster
+#      - name: BuildJammy
 #        run: |
-#           sed -i 's/DOCKERFILE=".*"/DOCKERFILE="image\/buster\/Dockerfile"/g' .env
-#           sed -i '7 i ARG GOVERSION' image/buster/Dockerfile
-#           sed -i '8 i RUN wget https://go.dev/dl/$GOVERSION' image/buster/Dockerfile
-#           sed -i '9 i RUN tar -xzf $GOVERSION' image/buster/Dockerfile
-#           sed -i '10 i RUN mv go /usr/local' image/buster/Dockerfile
-#           sed -i '11 i RUN ln -s /usr/local/go/bin/go /usr/bin/go' image/buster/Dockerfile
-#           GOVERSION=go1.20.4.linux-arm64.tar.gz ./build_image.sh -t buster -t latest -l arm64
-#           ./build_with_docker.sh -T -A -P linux/arm64 -B local/seafile/builder:buster
-#           GOVERSION=go1.20.4.linux-armv6l.tar.gz ./build_image.sh -t buster -t latest -l arm/v7
-#           ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:buster
-      - name: BuildBullseye
+#           sed -i 's/DOCKERFILE=".*"/DOCKERFILE="image\/jammy\/Dockerfile"/g' .env
+#           sed -i '8 i ARG GOVERSION' image/jammy/Dockerfile
+#           sed -i '9 i RUN wget https://go.dev/dl/$GOVERSION' image/jammy/Dockerfile
+#           sed -i '10 i RUN tar -xzf $GOVERSION' image/jammy/Dockerfile
+#           sed -i '11 i RUN mv go /usr/local' image/jammy/Dockerfile
+#           sed -i '12 i RUN ln -s /usr/local/go/bin/go /usr/bin/go' image/jammy/Dockerfile
+#           GOVERSION=go1.20.4.linux-arm64.tar.gz ./build_image.sh -t jammy -t latest -l arm64
+#           ./build_with_docker.sh -T -A -P linux/arm64 -B local/seafile/builder:jammy
+#           GOVERSION=go1.20.4.linux-armv6l.tar.gz ./build_image.sh -t jammy -t latest -l arm/v7
+#           ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:jammy
+      - name: BuildBuster
         run: |
-           sed -i 's/DOCKERFILE=".*"/DOCKERFILE="image\/bullseye\/Dockerfile"/g' .env
-           sed -i '7 i ARG GOVERSION' image/bullseye/Dockerfile
-           sed -i '8 i RUN wget https://go.dev/dl/$GOVERSION' image/bullseye/Dockerfile
-           sed -i '9 i RUN tar -xzf $GOVERSION' image/bullseye/Dockerfile
-           sed -i '10 i RUN mv go /usr/local' image/bullseye/Dockerfile
-           sed -i '11 i RUN ln -s /usr/local/go/bin/go /usr/bin/go' image/bullseye/Dockerfile
-           GOVERSION=go1.20.4.linux-arm64.tar.gz ./build_image.sh -t bullseye -t latest -l arm64
-           ./build_with_docker.sh -T -A -P linux/arm64 -B local/seafile/builder:bullseye
-           GOVERSION=go1.20.4.linux-armv6l.tar.gz ./build_image.sh -t bullseye -t latest -l arm/v7
-           ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:bullseye
-      - name: BuildBookworm
-        run: |
-           sed -i 's/DOCKERFILE=".*"/DOCKERFILE="image\/bookworm\/Dockerfile"/g' .env
-           sed -i '7 i ARG GOVERSION' image/bookworm/Dockerfile
-           sed -i '8 i RUN wget https://go.dev/dl/$GOVERSION' image/bookworm/Dockerfile
-           sed -i '9 i RUN tar -xzf $GOVERSION' image/bookworm/Dockerfile
-           sed -i '10 i RUN mv go /usr/local' image/bookworm/Dockerfile
-           sed -i '11 i RUN ln -s /usr/local/go/bin/go /usr/bin/go' image/bookworm/Dockerfile
-           GOVERSION=go1.20.4.linux-arm64.tar.gz ./build_image.sh -t bookworm -t latest -l arm64 -r local
-           ./build_with_docker.sh -T -A -P arm64 -B local/seafile/builder:bookworm
-           GOVERSION=go1.20.4.linux-armv6l.tar.gz ./build_image.sh -t bookworm -t latest -l arm/v7 -r local
-           ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:bookworm
+           sed -i 's/DOCKERFILE=".*"/DOCKERFILE="image\/buster\/Dockerfile"/g' .env
+           sed -i '7 i ARG GOVERSION' image/buster/Dockerfile
+           sed -i '8 i RUN wget https://go.dev/dl/$GOVERSION' image/buster/Dockerfile
+           sed -i '9 i RUN tar -xzf $GOVERSION' image/buster/Dockerfile
+           sed -i '10 i RUN mv go /usr/local' image/buster/Dockerfile
+           sed -i '11 i RUN ln -s /usr/local/go/bin/go /usr/bin/go' image/buster/Dockerfile
+           sed -i '12 i RUN apt-get install libc6-dev -y' image/buster/Dockerfile
+           GOVERSION=go1.20.4.linux-arm64.tar.gz ./build_image.sh -t buster -t latest -l arm64
+           ./build_with_docker.sh -T -A -P linux/arm64 -B local/seafile/builder:buster
+           GOVERSION=go1.20.4.linux-armv6l.tar.gz ./build_image.sh -t buster -t latest -l arm/v7
+           ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:buster
+ #     - name: BuildBullseye
+ #       run: |
+ #          sed -i 's/DOCKERFILE=".*"/DOCKERFILE="image\/bullseye\/Dockerfile"/g' .env
+ #          sed -i '7 i ARG GOVERSION' image/bullseye/Dockerfile
+ #          sed -i '8 i RUN wget https://go.dev/dl/$GOVERSION' image/bullseye/Dockerfile
+ #          sed -i '9 i RUN tar -xzf $GOVERSION' image/bullseye/Dockerfile
+ #          sed -i '10 i RUN mv go /usr/local' image/bullseye/Dockerfile
+ #          sed -i '11 i RUN ln -s /usr/local/go/bin/go /usr/bin/go' image/bullseye/Dockerfile
+ #          GOVERSION=go1.20.4.linux-arm64.tar.gz ./build_image.sh -t bullseye -t latest -l arm64
+ #          ./build_with_docker.sh -T -A -P linux/arm64 -B local/seafile/builder:bullseye
+ #          GOVERSION=go1.20.4.linux-armv6l.tar.gz ./build_image.sh -t bullseye -t latest -l arm/v7
+ #          ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:bullseye
+ #     - name: BuildBookworm
+ #       run: |
+ #          sed -i 's/DOCKERFILE=".*"/DOCKERFILE="image\/bookworm\/Dockerfile"/g' .env
+ #          sed -i '7 i ARG GOVERSION' image/bookworm/Dockerfile
+ #          sed -i '8 i RUN wget https://go.dev/dl/$GOVERSION' image/bookworm/Dockerfile
+ #          sed -i '9 i RUN tar -xzf $GOVERSION' image/bookworm/Dockerfile
+ #          sed -i '10 i RUN mv go /usr/local' image/bookworm/Dockerfile
+ #          sed -i '11 i RUN ln -s /usr/local/go/bin/go /usr/bin/go' image/bookworm/Dockerfile
+ #          GOVERSION=go1.20.4.linux-arm64.tar.gz ./build_image.sh -t bookworm -t latest -l arm64 -r local
+ #          ./build_with_docker.sh -T -A -P arm64 -B local/seafile/builder:bookworm
+ #          GOVERSION=go1.20.4.linux-armv6l.tar.gz ./build_image.sh -t bookworm -t latest -l arm/v7 -r local
+ #          ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:bookworm
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
         with:
