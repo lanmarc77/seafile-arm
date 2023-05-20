@@ -10,7 +10,7 @@ jobs:
       - name: PrepareHost
         run: |
            cp .env.example .env
-           sed -i 's/REGISTRY=".*"/REGISTRY="local"/g' .env
+           #sed -i 's/REGISTRY=".*"/REGISTRY="local"/g' .env
            #sed -i 's/BUILDER=".*"/BUILDER="local\/seafile\/builder:jammy"/g' .env
            sed -i 's/docker buildx create/docker buildx create --config .\/buildkit.toml/g' ./build_image.sh
            sed -i 's/docker run -it --rm/docker run --rm/g' ./build_with_docker.sh
@@ -27,23 +27,31 @@ jobs:
            sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
       - name: BuildJammy
         run: |
-           ./build_image.sh -t jammy -t latest -l arm/v7
-           ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:jammy
-           ./build_image.sh -t jammy -t latest -l arm64
-           ./build_with_docker.sh -T -A -P linux/arm64 -B local/seafile/builder:jammy
-           ./build_image.sh -t jammy -t latest -l amd64
+           ./build_image.sh -t jammy -t latest -l amd64 -r local
            ./build_with_docker.sh -T -A -P linux/amd64 -B local/seafile/builder:jammy
+           ./build_image.sh -t jammy -t latest -l arm64 -r local
+           ./build_with_docker.sh -T -A -P linux/arm64 -B local/seafile/builder:jammy
+           ./build_image.sh -t jammy -t latest -l arm/v7 -r local
+           ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:jammy
       - name: BuildBuster
         run: |
-           ./build_image.sh -t buster -t latest -l arm/v7
-           ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:buster
-           ./build_image.sh -t buster -t latest -l arm64
-           ./build_with_docker.sh -T -A -P linux/arm64 -B local/seafile/builder:buster
-           ./build_image.sh -t buster -t latest -l amd64
+           ./build_image.sh -t buster -t latest -l amd64 -r local
            ./build_with_docker.sh -T -A -P linux/amd64 -B local/seafile/builder:buster
+           ./build_image.sh -t buster -t latest -l arm64 -r local
+           ./build_with_docker.sh -T -A -P linux/arm64 -B local/seafile/builder:buster
+           ./build_image.sh -t buster -t latest -l arm/v7 -r local
+           ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:buster
+      - name: BuildBookworm
+        run: |
+           ./build_image.sh -t bookworm -t latest -l amd64 -r local
+           ./build_with_docker.sh -T -A -P linux/amd64 -B local/seafile/builder:bookworm
+           ./build_image.sh -t bookworm -t latest -l arm64 -r local
+           ./build_with_docker.sh -T -A -P linux/arm64 -B local/seafile/builder:bookworm
+           ./build_image.sh -t bookworm -t latest -l arm/v7 -r local
+           ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:bookworm
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: packages
+          name: ServerPackages
           path: |
-            build/**/built-seafile-server-pkgs
+            build/**/built-seafile-server-pkgs/*.tar.gz
