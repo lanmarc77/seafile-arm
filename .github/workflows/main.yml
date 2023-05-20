@@ -15,6 +15,7 @@ jobs:
            sed -i 's/-f "$DOCKERFILE" \\/-f "$DOCKERFILE" --build-arg GOVERSION=$GOVERSION  --no-cache --pull \\/g' ./build_image.sh
            sed -i 's/docker run -it --rm/docker run --rm/g' ./build_with_docker.sh
            sed -i 's/--pull always.*/--pull missing \\/g' ./build_with_docker.sh
+           sed -i '59 i rm -rf $OUTPUT_DIR\/$tag\/haiwen-build;rm -rf $OUTPUT_DIR\/$tag\/built-seafile-sources;rm -rf $OUTPUT_DIR\/$tag\/root\/opt\/local' ./build_with_docker.sh
            sed -i 's/golang-go \\/\\/g' ./build.sh
            chmod 755 ./build.sh
            chmod 755 ./build_with_docker.sh
