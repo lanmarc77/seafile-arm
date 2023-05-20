@@ -11,7 +11,6 @@ jobs:
         run: |
            cp .env.example .env
            sed -i 's/REGISTRY=".*"/REGISTRY="local"/g' .env
-           #sed -i 's/BUILDER=".*"/BUILDER="local\/seafile\/builder:jammy"/g' .env
            sed -i 's/docker buildx create/docker buildx create --config .\/buildkit.toml/g' ./build_image.sh
            sed -i 's/docker run -it --rm/docker run --rm/g' ./build_with_docker.sh
            sed -i 's/--pull always.*/--pull missing \\/g' ./build_with_docker.sh
