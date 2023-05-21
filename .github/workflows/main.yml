@@ -2,7 +2,7 @@ name: BuildServerPackages
 on: workflow_dispatch
 
 jobs:
-  BuildAllPlatforms:
+  BuildBuster:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -27,7 +27,7 @@ jobs:
            echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
            sudo apt-get update
            sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-      - name: BuildBuster
+      - name: BuildPackage
         run: |
            sed -i 's/DOCKERFILE=".*"/DOCKERFILE="image\/buster\/Dockerfile"/g' .env
            sed -i '7 i ARG GOVERSION' image/buster/Dockerfile
@@ -40,7 +40,38 @@ jobs:
            ./build_with_docker.sh -T -A -P linux/arm64 -B local/seafile/builder:buster
            GOVERSION=go1.20.4.linux-armv6l.tar.gz ./build_image.sh -t buster -t latest -l arm/v7
            ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:buster
-      - name: BuildBullseye
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: BusterServerPackage
+          path: |
+            build/**/built-seafile-server-pkgs/*.tar.gz
+  BuildBullseye:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      - name: PrepareHost
+        run: |
+           cp .env.example .env
+           sed -i 's/REGISTRY=".*"/REGISTRY="local"/g' .env
+           sed -i 's/docker buildx create/docker buildx create --config .\/buildkit.toml/g' ./build_image.sh
+           sed -i 's/-f "$DOCKERFILE" \\/-f "$DOCKERFILE" --build-arg GOVERSION=$GOVERSION  --no-cache --pull \\/g' ./build_image.sh
+           sed -i 's/docker run -it --rm/docker run --rm/g' ./build_with_docker.sh
+           sed -i 's/--pull always.*/--pull missing \\/g' ./build_with_docker.sh
+           sed -i '59 i sudo rm -rf $OUTPUT_DIR\/$tag\/haiwen-build;sudo rm -rf $OUTPUT_DIR\/$tag\/built-seafile-sources;sudo rm -rf $OUTPUT_DIR\/$tag\/root\/opt\/local' ./build_with_docker.sh
+           sed -i 's/golang-go \\/\\/g' ./build.sh
+           chmod 755 ./build.sh
+           chmod 755 ./build_with_docker.sh
+           chmod 755 ./build_image.sh
+           sudo apt-get install ca-certificates curl gnupg -y
+           sudo install -m 0755 -d /etc/apt/keyrings
+           curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+           sudo chmod a+r /etc/apt/keyrings/docker.gpg
+           echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+           sudo apt-get update
+           sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+      - name: BuildPackage
         run: |
            sed -i 's/DOCKERFILE=".*"/DOCKERFILE="image\/bullseye\/Dockerfile"/g' .env
            sed -i '7 i ARG GOVERSION' image/bullseye/Dockerfile
@@ -52,7 +83,38 @@ jobs:
            ./build_with_docker.sh -T -A -P linux/arm64 -B local/seafile/builder:bullseye
            GOVERSION=go1.20.4.linux-armv6l.tar.gz ./build_image.sh -t bullseye -t latest -l arm/v7
            ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:bullseye
-      - name: BuildBookworm
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: BullseyeServerPackage
+          path: |
+            build/**/built-seafile-server-pkgs/*.tar.gz
+  BuildBookworm:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      - name: PrepareHost
+        run: |
+           cp .env.example .env
+           sed -i 's/REGISTRY=".*"/REGISTRY="local"/g' .env
+           sed -i 's/docker buildx create/docker buildx create --config .\/buildkit.toml/g' ./build_image.sh
+           sed -i 's/-f "$DOCKERFILE" \\/-f "$DOCKERFILE" --build-arg GOVERSION=$GOVERSION  --no-cache --pull \\/g' ./build_image.sh
+           sed -i 's/docker run -it --rm/docker run --rm/g' ./build_with_docker.sh
+           sed -i 's/--pull always.*/--pull missing \\/g' ./build_with_docker.sh
+           sed -i '59 i sudo rm -rf $OUTPUT_DIR\/$tag\/haiwen-build;sudo rm -rf $OUTPUT_DIR\/$tag\/built-seafile-sources;sudo rm -rf $OUTPUT_DIR\/$tag\/root\/opt\/local' ./build_with_docker.sh
+           sed -i 's/golang-go \\/\\/g' ./build.sh
+           chmod 755 ./build.sh
+           chmod 755 ./build_with_docker.sh
+           chmod 755 ./build_image.sh
+           sudo apt-get install ca-certificates curl gnupg -y
+           sudo install -m 0755 -d /etc/apt/keyrings
+           curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+           sudo chmod a+r /etc/apt/keyrings/docker.gpg
+           echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+           sudo apt-get update
+           sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+      - name: BuildPackage
         run: |
            sed -i 's/DOCKERFILE=".*"/DOCKERFILE="image\/bookworm\/Dockerfile"/g' .env
            sed -i '7 i ARG GOVERSION' image/bookworm/Dockerfile
@@ -64,7 +126,38 @@ jobs:
            ./build_with_docker.sh -T -A -P arm64 -B local/seafile/builder:bookworm
            GOVERSION=go1.20.4.linux-armv6l.tar.gz ./build_image.sh -t bookworm -t latest -l arm/v7 -r local
            ./build_with_docker.sh -T -A -P linux/arm/v7 -B local/seafile/builder:bookworm
-      - name: BuildJammy
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: BookwormServerPackage
+          path: |
+            build/**/built-seafile-server-pkgs/*.tar.gz
+  BuildJammy:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      - name: PrepareHost
+        run: |
+           cp .env.example .env
+           sed -i 's/REGISTRY=".*"/REGISTRY="local"/g' .env
+           sed -i 's/docker buildx create/docker buildx create --config .\/buildkit.toml/g' ./build_image.sh
+           sed -i 's/-f "$DOCKERFILE" \\/-f "$DOCKERFILE" --build-arg GOVERSION=$GOVERSION  --no-cache --pull \\/g' ./build_image.sh
+           sed -i 's/docker run -it --rm/docker run --rm/g' ./build_with_docker.sh
+           sed -i 's/--pull always.*/--pull missing \\/g' ./build_with_docker.sh
+           sed -i '59 i sudo rm -rf $OUTPUT_DIR\/$tag\/haiwen-build;sudo rm -rf $OUTPUT_DIR\/$tag\/built-seafile-sources;sudo rm -rf $OUTPUT_DIR\/$tag\/root\/opt\/local' ./build_with_docker.sh
+           sed -i 's/golang-go \\/\\/g' ./build.sh
+           chmod 755 ./build.sh
+           chmod 755 ./build_with_docker.sh
+           chmod 755 ./build_image.sh
+           sudo apt-get install ca-certificates curl gnupg -y
+           sudo install -m 0755 -d /etc/apt/keyrings
+           curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+           sudo chmod a+r /etc/apt/keyrings/docker.gpg
+           echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+           sudo apt-get update
+           sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+      - name: BuildPackage
         run: |
            sed -i 's/DOCKERFILE=".*"/DOCKERFILE="image\/jammy\/Dockerfile"/g' .env
            sed -i '8 i ARG GOVERSION' image/jammy/Dockerfile
@@ -79,6 +172,6 @@ jobs:
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: ServerPackages
+          name: JammyServerPackage
           path: |
             build/**/built-seafile-server-pkgs/*.tar.gz
